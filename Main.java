@@ -2,12 +2,12 @@ import femto.mode.HiRes16Color;
 import femto.Game;
 import femto.State;
 import femto.input.Button;
-import femto.palette.Castpixel16;
 import femto.font.TIC80;
+import femto.sound.Mixer;
 
 class Main extends State {
-    
-    HiRes16Color screen; // the screenmode we want to draw with
+    // the screenmode we want to draw with
+    HiRes16Color screen; 
 
     Robo robo;
     Trash trash;
@@ -24,10 +24,10 @@ class Main extends State {
     int direction, nudge;
     boolean primeChange;
     
-    GameState state;
-
     public static void main(String[] args){
-        Game.run( TIC80.font(), new Main() );
+        // Must initialize the mixer if you intend to play sound
+        Mixer.init(); 
+        Game.run( TIC80.font(), new Start() );
     }
     
     void init(){
@@ -58,29 +58,27 @@ class Main extends State {
         
         nextX = 1;
         nextY = 0;
-        
-        state = GameState.RUNNING;
-
     }
 
     void shutdown(){
         screen = null;
     }
     
-    
     void update(){
         // For testing
-        if( Button.A.justPressed() ) Game.changeState( new Main() );
+        if( Button.C.justPressed() ) {
+            Game.changeState( new Shop() );
+        }
         screen.clear(5);
         
         
-        switch(state){
+        switch(Global.state){
             case GameState.FULL:
                 if(Button.A.justPressed() || Button.B.justPressed()){
                     fill-=10;
                     if(fill <= 0){
                         fill = 0;
-                        state = GameState.RUNNING;
+                        Global.state = GameState.RUNNING;
                     }
                 }
                 break;
@@ -92,7 +90,7 @@ class Main extends State {
                 
                 if(battery >= 100){
                     battery = 100;
-                    state = GameState.RUNNING;
+                    Global.state = GameState.RUNNING;
                 }
                 break;
             case GameState.RUNNING:
@@ -140,19 +138,9 @@ class Main extends State {
         screen.fillRect(0, 24, battery, 3, 7, false);
         screen.fillRect(0, 22, fill, 3, 9, false);
         screen.setTextPosition(0, 0);
-        screen.setTextColor(0);
-        screen.println(rx);
-        screen.println(ry);
-        screen.setTextPosition(40, 0);
-        screen.print(tx);
-        screen.setTextPosition(40, 8);
-        screen.print(ty);
-        
-        if(primeChange){
-            screen.setTextPosition(100, 0);
-            screen.print("<-- NUDGE -->");
-        }
-        
+
+        screen.println("Coin: $"+Global.coin );
+
         charger.draw(screen, 14, 32);
         trash.draw(screen);
         robo.draw(screen);
@@ -172,7 +160,7 @@ class Main extends State {
         robo.hor();
         direction = 2;
         vx = 16;
-        state = GameState.CHARGING;
+        Global.state = GameState.CHARGING;
     }
     
     void makeMove(){
@@ -354,6 +342,7 @@ class Main extends State {
         if(rx == tx && ry == ty){
             setTrash();
             fill+=10;
+            Global.coin++;
             if(fill > 200){
                 robo.hor();
                 robo.setMirrored(true);
@@ -362,12 +351,8 @@ class Main extends State {
                 ry = 7;
                 vx =-16;
                 direction = 0;
-                state = GameState.FULL;
+                Global.state = GameState.FULL;
             }
         }
     }
-}
-
-enum GameState {
-    FULL, CHARGING, RUNNING, PAUSE
 }
