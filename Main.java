@@ -71,7 +71,6 @@ class Main extends State {
         }
         screen.clear(5);
         
-        
         switch(Global.state){
             case GameState.FULL:
                 if(Button.A.justPressed() || Button.B.justPressed()){
@@ -127,21 +126,23 @@ class Main extends State {
         }
         
         //debugging grid
+        /*
         for(int i = 0; i < 12; i++){
             for(int j = 0; j < 8; j++){
                 screen.drawRect(14+i*16, 32+j*16, 16, 16, 9, true);    
             }
-        }
+        }*/
 
         //draw HUD box
         screen.fillRect(0, 0, 240, 16, 11, true);
         screen.fillRect(0, 24, battery, 3, 7, false);
-        screen.fillRect(0, 22, fill, 3, 9, false);
+        screen.fillRect(0, 20, fill, 3, 9, false);
         screen.setTextPosition(0, 0);
 
         screen.println("Coin: $"+Global.coin );
 
         charger.draw(screen, 14, 32);
+        screen.fillRect(14+11*16, 32+7*16, 16, 16, 9, true);
         trash.draw(screen);
         robo.draw(screen);
         

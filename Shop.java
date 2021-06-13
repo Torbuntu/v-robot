@@ -21,7 +21,7 @@ class Shop extends State {
         
         screen.clear(0);
         screen.setTextPosition(0, 0);
-        screen.println("This is the shop! Buy upgrades and toys here.\n");
+        screen.println("This is the shop! Buy toys and new robots here.\n");
         screen.println("\nThere don't seem to be many items here yet. Check back later!");
         screen.println("\nPress <A> to begin cleaning.");
         screen.flush();
