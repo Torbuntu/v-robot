@@ -12,6 +12,7 @@ class Main extends State {
     Robo robo;
     Trash trash;
     Charger charger;
+    Battery batterySprite;
     // 0 - cheese, 1 - chips, etc...
     int trashID;
     
@@ -34,6 +35,9 @@ class Main extends State {
         screen = new HiRes16Color(Castpixel16.palette(), TIC80.font());
         charger = new Charger();
         charger.charging();
+        
+        batterySprite = new Battery();
+        batterySprite.full();
         
         robo = new Robo();
         robo.hor();
@@ -73,7 +77,7 @@ class Main extends State {
         
         switch(Global.state){
             case GameState.FULL:
-                if(Button.A.justPressed() || Button.B.justPressed()){
+                if( Button.B.justPressed() ){
                     fill-=10;
                     if(fill <= 0){
                         fill = 0;
@@ -82,13 +86,14 @@ class Main extends State {
                 }
                 break;
             case GameState.CHARGING:
-                if(Button.Left.justPressed() || Button.Right.justPressed() ||
-                    Button.Up.justPressed() || Button.Down.justPressed()){
+                if( Button.A.justPressed() ){
                     battery+=10;
+                    updateBattery();
                 }
                 
-                if(battery >= 100){
+                if( battery >= 100 ){
                     battery = 100;
+                    batterySprite.full();
                     Global.state = GameState.RUNNING;
                 }
                 break;
@@ -97,10 +102,15 @@ class Main extends State {
                 else{
                     battery--;
                     tic = 15;
+                    updateBattery();
                 }
                 
                 if(battery <= 0){
                     switchToCharging();
+                    return;
+                }
+                if(fill > 200){
+                    switchToEmptying();
                     return;
                 }
                 
@@ -135,11 +145,15 @@ class Main extends State {
 
         //draw HUD box
         screen.fillRect(0, 0, 240, 16, 11, true);
-        screen.fillRect(0, 24, battery, 3, 7, false);
+        //screen.fillRect(0, 24, battery, 3, 7, false);
         screen.fillRect(0, 20, fill, 3, 9, false);
+        
+        batterySprite.draw(screen, 0, 16);
         screen.setTextPosition(0, 0);
 
         screen.println("Coin: $"+Global.coin );
+        
+        screen.println("r: [" + rx + "," + ry +"], t: [" + tx + ","+ty+"]");
 
         charger.draw(screen, 14, 32);
         screen.fillRect(14+11*16, 32+7*16, 16, 16, 9, true);
@@ -147,6 +161,14 @@ class Main extends State {
         robo.draw(screen);
         
         screen.flush();
+    }
+    
+    void updateBattery(){
+        if(battery < 95)batterySprite.q4();
+        if(battery < 75)batterySprite.q3();
+        if(battery < 50)batterySprite.q2();
+        if(battery < 25)batterySprite.q1();
+        if(battery < 2)batterySprite.empty();
     }
     
     void switchToCharging(){
@@ -162,6 +184,21 @@ class Main extends State {
         direction = 2;
         vx = 16;
         Global.state = GameState.CHARGING;
+    }
+    
+    void switchToEmptying(){
+        robo.x = 190;
+        robo.y = 144;
+        rx = 11;
+        ry = 7;
+        nextX = 10;
+        nextY = 7;
+        robo.setFlipped(false);
+        robo.setMirrored(true);
+        robo.hor();
+        direction = 0;
+        vx = -16;
+        Global.state = GameState.FULL;
     }
     
     void makeMove(){
@@ -344,16 +381,6 @@ class Main extends State {
             setTrash();
             fill+=10;
             Global.coin++;
-            if(fill > 200){
-                robo.hor();
-                robo.setMirrored(true);
-                robo.setPosition(14+11*16, 32+7*16);
-                rx = 11;
-                ry = 7;
-                vx =-16;
-                direction = 0;
-                Global.state = GameState.FULL;
-            }
         }
     }
 }
