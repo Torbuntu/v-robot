@@ -113,7 +113,7 @@ public class CleaningScreen extends State {
         //draw HUD box
         screen.fillRect(0, 0, 240, 16, 11, true);
         //screen.fillRect(0, 24, battery, 3, 7, false);
-        screen.fillRect(0, 40, 3, fill, 9, false);
+        screen.fillRect(0, 40, fill, 3, 9, false);
         
         batterySprite.draw(screen, 0, 16);
         

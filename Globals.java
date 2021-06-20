@@ -8,8 +8,6 @@ public class Globals {
     static final HiRes16Color screen = new HiRes16Color(Castpixel16.palette(), TIC80.font());
 
     static int coin;
-    static int battery;
-    static int cartridge;
     static int fill;
 
     static void setup(){

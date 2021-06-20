@@ -19,6 +19,7 @@ class ChargeScreen extends State {
         xs = 1;
         batterySprite = new Battery();
         batterySprite.empty();
+        
     }
     
     void update(){
@@ -39,8 +40,8 @@ class ChargeScreen extends State {
         }
         
         screen.fillRect(75, 0, 70, 176, 14, true);
-        
-        batterySprite.draw(screen, x,60);
+        batterySprite.setPosition(x, 60);
+        batterySprite.rotoscale(screen, 0, 2);
         screen.flush();
     }
     

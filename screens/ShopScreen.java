@@ -31,6 +31,8 @@ class ShopScreen extends State {
     
     void shutdown(){
         screen = null;
+        Globals.saveManager.coin = Globals.coin;
+        Globals.saveManager.saveCookie();
     }
     
 }

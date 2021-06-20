@@ -14,11 +14,8 @@ class EmptyScreen extends State {
         fill = Globals.fill;
     }
     void update(){
-        if( Button.A.justPressed() ) {
-            Game.changeState( new CleaningScreen() );
-        }
-        
-        if( Button.B.justPressed() ){
+
+        if( Button.A.justPressed() ){
             fill-=10;
             if(fill <= 0){
                 Globals.fill = 0;

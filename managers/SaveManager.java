@@ -5,6 +5,8 @@ public class SaveManager extends femto.Cookie {
     }
     
     int coin;
-    int battery;
-    int cartridge;
+    // TODO: Add a few prizes for purchasing. 
+    // Prior to the start of the game, the player may choose
+    // where to place their prizes. The robot will bump off 
+    // of them and trash will not form under them.
 }
