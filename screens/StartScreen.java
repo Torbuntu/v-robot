@@ -3,9 +3,12 @@ import femto.Game;
 import femto.State;
 import femto.input.Button;
 import femto.font.TIC80;
-import femto.sound.Mixer;
 
-public class Start extends State {
+import sprites.Robo;
+
+import screens.CleaningScreen;
+
+class StartScreen extends State {
     // the screenmode we want to draw with
     HiRes16Color screen;
     Robo robo;
@@ -13,17 +16,18 @@ public class Start extends State {
     int t = 0, c = 0;
     
     void init(){
-        Global.init();
-        screen = new HiRes16Color(Castpixel16.palette(),TIC80.font());
-        
         robo = new Robo();
         robo.hor();
         robo.y = 32;
         robo.x = 14;
+        screen = Globals.screen;
+        
+
     }
+    
     void update(){
         if( Button.A.justPressed() ) {
-            Game.changeState( new Main() );
+            Game.changeState( new CleaningScreen() );
         }
         
         t++;
@@ -41,6 +45,7 @@ public class Start extends State {
         robo.draw(screen);
         screen.flush();
     }
+    
     void shutdown(){
         screen = null;
     }
